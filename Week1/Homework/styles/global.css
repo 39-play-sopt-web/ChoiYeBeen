@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-bg: #b4cde6;
+  --color-text: #000000;
+  --color-border: #0300b2;
+}
+
+body {
+  background-color: var(--color-bg);
+}
+
+.layout {
+  display: grid;
+}
