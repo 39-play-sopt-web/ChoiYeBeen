@@ -20,6 +20,9 @@
   background-color: #d8ebf2;
   text-decoration: none;
   color: inherit;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .side-nav a:hover {
