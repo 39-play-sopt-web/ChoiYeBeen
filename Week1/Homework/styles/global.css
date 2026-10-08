@@ -6,12 +6,16 @@
   --color-bg: #b4cde6;
   --color-text: #000000;
   --color-border: #0300b2;
+
+  --header-height: 64px;
 }
 
 body {
   background-color: var(--color-bg);
+  padding-top: var(--header-height);
 }
 
 .layout {
   display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
 }
