@@ -1,0 +1,74 @@
+.interest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.interest-body {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  gap: 12px;
+  padding: 12px;
+}
+
+.interest-card {
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* 카드 hover 시 상승 + 그림자 효과 */
+.interest-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.25);
+}
+
+.interest-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.interest-name {
+  text-align: center;
+  margin: 0;
+  padding: 8px;
+}
+
+.interest-action {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.interest-button {
+  border: none;
+  border-radius: 36px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 16px;
+}
+
+.like-button {
+  background-color: #81ecae;
+}
+
+.dislike-button {
+  background-color: #f66767;
+}
+
+.like-button:hover {
+  background-color: #5fc88b;
+}
+
+.dislike-button:hover {
+  background-color: #e15050;
+}
