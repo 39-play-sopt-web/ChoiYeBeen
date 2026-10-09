@@ -1,0 +1,53 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  width: 100%;
+  height: var(--header-height);
+  padding: 0 16px;
+  background-color: var(--color-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.header_left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 심화: 그림자 효과 */
+.header_left img:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.25);
+}
+
+.header h1 {
+  margin: 0;
+  text-align: center;
+}
+
+.header_right {
+  display: flex;
+  justify-content: center;
+}
+
+.header_right ul {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
