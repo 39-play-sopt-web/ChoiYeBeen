@@ -17,9 +17,21 @@ function Game() {
     shuffle([10, 11, 12, 13, 14, 15, 16, 17, 18]),
   );
 
+  function resetGame() {
+    setNumbers(shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
+    setRemainingNumbers(shuffle([10, 11, 12, 13, 14, 15, 16, 17, 18]));
+    setNextNumber(1);
+  }
+
   function handleNumberClick(number, index) {
     // 순서에 맞지 않는 숫자는 처리 X
     if (number !== nextNumber) {
+      return;
+    }
+
+    if (number === 18) {
+      window.alert("게임 완료!");
+      resetGame();
       return;
     }
 
