@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-function Header({ menu, onMenuChange }) {
+function Header({ menu, onMenuChange, elapsedTime }) {
   return (
     <HeaderContainer>
       <Title>🔢숫자 클릭 게임</Title>
@@ -30,7 +30,7 @@ function Header({ menu, onMenuChange }) {
             <option value="3">Level 1 (5x5)</option>
           </LevelSelect>
 
-          <Timer>0.00초</Timer>
+          <Timer>{(elapsedTime / 1000).toFixed(2)}초</Timer>
         </GameControls>
       )}
     </HeaderContainer>

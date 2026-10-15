@@ -3,15 +3,33 @@ import GlobalStyle from "./styles/GlobalStyle";
 import { useState } from "react";
 import Header from "./components/Header";
 import Game from "./components/Game";
+import useNumberGame from "./hooks/useNumberGame";
 
 function App() {
   const [menu, setMenu] = useState("game");
 
+  const game = useNumberGame();
+
   return (
     <>
       <GlobalStyle />
-      <Header menu={menu} onMenuChange={setMenu} />
-      <Main>{menu === "game" ? <Game /> : <p>랭킹 화면</p>}</Main>
+      <Header
+        menu={menu}
+        onMenuChange={setMenu}
+        elapsedTime={game.elapsedTime}
+      />
+      <Main>
+        {menu === "game" ? (
+          <Game
+            numbers={game.numbers}
+            nextNumber={game.nextNumber}
+            size={game.size}
+            onNumberClick={game.handleNumberClick}
+          />
+        ) : (
+          <p>랭킹 화면</p>
+        )}
+      </Main>
     </>
   );
 }
