@@ -1,12 +1,17 @@
 import styled from "@emotion/styled";
 import shuffle from "../utils/shuffle";
+import { LEVEL_CONFIG } from "../constants/game";
+import createNumbers from "../utils/createNumbers";
 
 import { useState } from "react";
 
 function Game() {
+  const { size, maxNumber } = LEVEL_CONFIG[1];
+  const cellCount = size * size;
+
   // 처음 게임판에 표시될 1~9를 무작위로 배치
   const [numbers, setNumbers] = useState(() =>
-    shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]),
+    shuffle(createNumbers(1, cellCount)),
   );
 
   // 다음에 클릭해야 하는 숫자
@@ -14,12 +19,12 @@ function Game() {
 
   // 클릭한 칸에 채울 10~18을 미리 섞어서 보관
   const [remainingNumbers, setRemainingNumbers] = useState(() =>
-    shuffle([10, 11, 12, 13, 14, 15, 16, 17, 18]),
+    shuffle(createNumbers(cellCount + 1, maxNumber - cellCount)),
   );
 
   function resetGame() {
-    setNumbers(shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]));
-    setRemainingNumbers(shuffle([10, 11, 12, 13, 14, 15, 16, 17, 18]));
+    setNumbers(shuffle(createNumbers(1, cellCount)));
+    setRemainingNumbers(shuffle(cellCount + 1, maxNumber - cellCount));
     setNextNumber(1);
   }
 
@@ -29,7 +34,7 @@ function Game() {
       return;
     }
 
-    if (number === 18) {
+    if (number === maxNumber) {
       window.alert("게임 완료!");
       resetGame();
       return;
@@ -56,7 +61,7 @@ function Game() {
     <GameContainer>
       <p>다음 숫자: {nextNumber}</p>
 
-      <Board>
+      <Board $size={size}>
         {numbers.map((number, index) => (
           <NumberButton
             key={index}
@@ -84,7 +89,7 @@ const GameContainer = styled.section`
 
 const Board = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(${({ $size }) => $size}, minmax(0, 1fr));
   gap: 8px;
   width: 100%;
   max-width: 360px;
