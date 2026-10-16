@@ -31,27 +31,29 @@ function Ranking() {
       {records.length === 0 ? (
         <EmptyMessage>아직 기록이 없어요. 게임을 플레이해 보세요!</EmptyMessage>
       ) : (
-        <RankingTable>
-          <thead>
-            <tr>
-              <th scope="col">순위</th>
-              <th scope="col">레벨</th>
-              <th scope="col">플레이 시간</th>
-              <th scope="col">기록 시간</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {sortedRecords.map((record, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>Level {record.level}</td>
-                <td>{(record.playTime / 1000).toFixed(2)}초</td>
-                <td>{new Date(record.recordedAt).toLocaleString("ko-KR")}</td>
+        <TableWrapper>
+          <RankingTable>
+            <thead>
+              <tr>
+                <th scope="col">순위</th>
+                <th scope="col">레벨</th>
+                <th scope="col">플레이 시간</th>
+                <th scope="col">기록 시간</th>
               </tr>
-            ))}
-          </tbody>
-        </RankingTable>
+            </thead>
+
+            <tbody>
+              {sortedRecords.map((record, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>Level {record.level}</td>
+                  <td>{(record.playTime / 1000).toFixed(2)}초</td>
+                  <td>{new Date(record.recordedAt).toLocaleString("ko-KR")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </RankingTable>
+        </TableWrapper>
       )}
     </RankingContainer>
   );
@@ -64,6 +66,12 @@ const RankingContainer = styled.section`
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
+`;
+
+const TableWrapper = styled.div`
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: ${({ theme }) => theme.shadow.ranking};
 `;
 
 const RankingHeader = styled.div`
@@ -80,14 +88,16 @@ const RankingHeader = styled.div`
 
 const ResetButton = styled.button`
   padding: 6px 12px;
-  border: 1px solid ${({ theme }) => theme.color.subText};
+  border: 1px solid ${({ theme }) => theme.color.danger};
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.color.surface};
-  color: ${({ theme }) => theme.color.text};
+  background-color: ${({ theme }) => theme.color.transparent};
+  color: ${({ theme }) => theme.color.danger};
+  font-size: 13px;
   cursor: pointer;
+  transition: background-color 0.15s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.color.hover};
+    background-color: ${({ theme }) => theme.color.dangerHover};
   }
 `;
 
@@ -101,7 +111,6 @@ const RankingTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   background-color: ${({ theme }) => theme.color.surface};
-  border-radius: 8px;
 
   th,
   td {

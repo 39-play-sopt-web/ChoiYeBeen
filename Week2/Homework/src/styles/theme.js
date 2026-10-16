@@ -11,9 +11,12 @@ const theme = {
     hover: "#e6fff5",
     backgroundStart: "#a5f3fc",
     backgroundEnd: "#6ee7b7",
+    danger: "#ef4444",
+    dangerhover: "#fef2f2",
   },
   shadow: {
     card: "0 2px 6px #00000015",
+    ranking: "0 4px 12px rgba(0, 0, 0, 0.08)",
   },
 };
 
