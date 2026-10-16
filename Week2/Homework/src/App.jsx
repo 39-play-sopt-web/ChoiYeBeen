@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Game from "./components/Game";
 import useNumberGame from "./hooks/useNumberGame";
+import Ranking from "./components/Ranking";
 
 function App() {
   const [menu, setMenu] = useState("game");
@@ -27,7 +28,7 @@ function App() {
             onNumberClick={game.handleNumberClick}
           />
         ) : (
-          <p>랭킹 화면</p>
+          <Ranking />
         )}
       </Main>
     </>

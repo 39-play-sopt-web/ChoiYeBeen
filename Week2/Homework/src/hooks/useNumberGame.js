@@ -3,9 +3,11 @@ import { shuffle } from "../utils/shuffle";
 import { LEVEL_CONFIG } from "../constants/game";
 import { createNumbers } from "../utils/createNumbers";
 import useTimer from "./useTimer";
+import { addRecord } from "../utils/recordStorage";
 
 function useNumberGame() {
-  const { size, maxNumber } = LEVEL_CONFIG[1];
+  const level = 1;
+  const { size, maxNumber } = LEVEL_CONFIG[level];
   const cellCount = size * size;
   const { elapsedTime, startTimer, stopTimer, resetTimer } = useTimer();
 
@@ -43,6 +45,12 @@ function useNumberGame() {
 
     if (number === maxNumber) {
       const finalTime = stopTimer();
+
+      addRecord({
+        recordedAt: new Date().toISOString(),
+        level,
+        playTime: finalTime,
+      });
 
       window.alert(`게임 완료! ${(finalTime / 1000).toFixed(2)}초`);
       resetGame();

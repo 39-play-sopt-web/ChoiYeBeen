@@ -3,3 +3,5 @@ export const LEVEL_CONFIG = {
   2: { size: 4, maxNumber: 32 },
   3: { size: 5, maxNumber: 50 },
 };
+
+export const RECORD_STORAGE_KEY = "number-game-records";
