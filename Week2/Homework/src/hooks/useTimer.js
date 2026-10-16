@@ -36,6 +36,7 @@ function useTimer() {
   }
 
   function resetTimer() {
+    clearTimer();
     startTimeRef.current = null;
     setElapsedTime(0);
   }

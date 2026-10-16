@@ -18,6 +18,8 @@ function App() {
         menu={menu}
         onMenuChange={setMenu}
         elapsedTime={game.elapsedTime}
+        level={game.level}
+        onLevelChange={game.handleLevelChange}
       />
       <Main>
         {menu === "game" ? (

@@ -6,7 +6,7 @@ import useTimer from "./useTimer";
 import { addRecord } from "../utils/recordStorage";
 
 function useNumberGame() {
-  const level = 1;
+  const [level, setLevel] = useState(1);
   const { size, maxNumber } = LEVEL_CONFIG[level];
   const cellCount = size * size;
   const { elapsedTime, startTimer, stopTimer, resetTimer } = useTimer();
@@ -31,6 +31,19 @@ function useNumberGame() {
     );
     setNextNumber(1);
     resetTimer();
+  }
+
+  function handleLevelChange(nextLevel) {
+    const { size, maxNumber } = LEVEL_CONFIG[nextLevel];
+    const cellCount = size * size;
+
+    resetTimer();
+    setLevel(nextLevel);
+    setNumbers(shuffle(createNumbers(1, cellCount)));
+    setRemainingNumbers(
+      shuffle(createNumbers(cellCount + 1, maxNumber - cellCount)),
+    );
+    setNextNumber(1);
   }
 
   function handleNumberClick(number, index) {
@@ -80,6 +93,8 @@ function useNumberGame() {
     size,
     elapsedTime,
     handleNumberClick,
+    level,
+    handleLevelChange,
   };
 }
 
