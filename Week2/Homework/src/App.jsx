@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Game from "./components/Game";
 import useNumberGame from "./hooks/useNumberGame";
 import Ranking from "./components/Ranking";
+import ResultModal from "./components/ResultModal";
 
 function App() {
   const [menu, setMenu] = useState("game");
@@ -33,6 +34,9 @@ function App() {
           <Ranking />
         )}
       </Main>
+      {game.result !== null && (
+        <ResultModal result={game.result} onConfirm={game.resetGame} />
+      )}
     </>
   );
 }

@@ -7,6 +7,7 @@ import { addRecord } from "../utils/recordStorage";
 
 function useNumberGame() {
   const [level, setLevel] = useState(1);
+  const [result, setResult] = useState(null);
   const { size, maxNumber } = LEVEL_CONFIG[level];
   const cellCount = size * size;
   const { elapsedTime, startTimer, stopTimer, resetTimer } = useTimer();
@@ -31,6 +32,7 @@ function useNumberGame() {
     );
     setNextNumber(1);
     resetTimer();
+    setResult(null);
   }
 
   function handleLevelChange(nextLevel) {
@@ -44,9 +46,14 @@ function useNumberGame() {
       shuffle(createNumbers(cellCount + 1, maxNumber - cellCount)),
     );
     setNextNumber(1);
+    setResult(null);
   }
 
   function handleNumberClick(number, index) {
+    if (result !== null) {
+      return;
+    }
+
     if (number === 1) {
       startTimer();
     }
@@ -59,14 +66,19 @@ function useNumberGame() {
     if (number === maxNumber) {
       const finalTime = stopTimer();
 
+      // 마지막으로 클릭한 칸도 비우기
+      setNumbers((prev) =>
+        prev.map((value, cellIndex) => (cellIndex === index ? null : value)),
+      );
+
       addRecord({
         recordedAt: new Date().toISOString(),
         level,
         playTime: finalTime,
       });
 
-      window.alert(`게임 완료! ${(finalTime / 1000).toFixed(2)}초`);
-      resetGame();
+      setResult({ level, playTime: finalTime });
+
       return;
     }
 
@@ -95,6 +107,8 @@ function useNumberGame() {
     handleNumberClick,
     level,
     handleLevelChange,
+    result,
+    resetGame,
   };
 }
 

@@ -1,4 +1,4 @@
-function shuffle(numbers) {
+export function shuffle(numbers) {
   const result = [...numbers];
 
   for (let i = result.length - 1; i > 0; i--) {
@@ -9,5 +9,3 @@ function shuffle(numbers) {
 
   return result;
 }
-
-export default shuffle;

@@ -58,7 +58,7 @@ const NumberButton = styled.button`
   }
 
   &:active {
-    // 버튼이 클릭되는 것 같은 효과 (버튼 눌릴 때 크기 줄이기)
+    /* 버튼이 클릭되는 것 같은 효과 (버튼 눌릴 때 크기 줄이기) */
     transform: scale(0.8);
     background-color: ${({ theme }) => theme.color.primary};
   }
