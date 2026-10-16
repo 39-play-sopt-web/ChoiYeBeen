@@ -5,8 +5,14 @@ import { getRecords, clearRecords } from "../utils/recordStorage";
 function Ranking() {
   const [records, setRecords] = useState(() => getRecords());
 
-  // 원본을 변경하지 않도록 복사한 뒤 플레이 시간 순으로 정렬
-  const sortedRecords = [...records].sort((a, b) => a.playTime - b.playTime);
+  // 원본을 변경하지 않도록 복사한 뒤 정렬
+  const sortedRecords = [...records].sort((a, b) => {
+    // 레벨이 같지 않다면 높은 레벨이 앞으로, 레벨이 같다면 짧은 시간이 앞으로
+    if (a.level !== b.level) {
+      return b.level - a.level;
+    }
+    return a.playTime - b.playTime;
+  });
 
   function handleClearRecords() {
     clearRecords();
@@ -95,6 +101,7 @@ const RankingTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   background-color: ${({ theme }) => theme.color.surface};
+  border-radius: 8px;
 
   th,
   td {
@@ -107,6 +114,6 @@ const RankingTable = styled.table`
   }
 
   td {
-    border-bottom: 1px solid ${({ theme }) => theme.color.border};
+    border-top: 1px solid ${({ theme }) => theme.color.border};
   }
 `;
