@@ -1,0 +1,40 @@
+.side-nav {
+  position: sticky;
+  top: var(--header-height);
+  align-self: start;
+  padding: 16px;
+}
+
+.side-nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.side-nav a {
+  display: block;
+  padding: 16px;
+  background-color: #d8ebf2;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.side-nav a:hover {
+  background-color: #4682b4;
+  color: #ffffff;
+}
+
+/* 심화: 처음 + 마지막 모서리 반경 다르게 설정 */
+.side-nav li:first-child a {
+  border-radius: 8px 8px 0 0;
+}
+
+.side-nav li:last-child a {
+  border-radius: 0 0 8px 8px;
+}
