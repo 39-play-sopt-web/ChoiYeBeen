@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getMovies } from './apis/movie';
 import type { RatingFilter } from './apis/movie';
 import type { Movie } from './types/movie';
@@ -18,23 +18,35 @@ function App() {
   const [filter, setFilter] = useState<RatingFilter>('all');
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState('');
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     let active = true;
 
     const loadMovies = async () => {
       try {
+        setLoading(true);
         setError('');
-        setMovies([]);
 
-        const data = await getMovies(1, filter);
+        const data = await getMovies(page, filter);
 
         if (active) {
-          setMovies(data.results);
+          setMovies((current) =>
+            page === 1 ? data.results : [...current, ...data.results],
+          );
+          setHasMore(data.page < data.total_pages);
         }
       } catch {
         if (active) {
           setError('영화 목록을 불러오지 못했습니다.');
+          setHasMore(false);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
         }
       }
     };
@@ -44,7 +56,27 @@ function App() {
     return () => {
       active = false;
     };
-  }, [filter]);
+  }, [page, filter]);
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+
+    if (!target || loading || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          observer.disconnect();
+          setPage((current) => current + 1);
+        }
+      },
+      { rootMargin: '300px' },
+    );
+
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [loading, hasMore]);
 
   return (
     <Main>
@@ -56,7 +88,13 @@ function App() {
             type='button'
             $selected={filter === value}
             aria-pressed={filter === value}
-            onClick={() => setFilter(value)}
+            onClick={() => {
+              setMovies([]);
+              setPage(1);
+              setHasMore(true);
+              setLoading(true);
+              setFilter(value);
+            }}
           >
             {label}
           </FilterButton>
@@ -68,6 +106,8 @@ function App() {
           <MovieCard key={movie.id} movie={movie} />
         ))}
       </MovieGrid>
+      {loading && <p>영화를 불러오는 중...</p>}
+      <div ref={loadMoreRef} />
     </Main>
   );
 }
