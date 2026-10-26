@@ -18,7 +18,7 @@ function MovieCard({ movie }: MovieCardProps) {
       )}
 
       <Content>
-        <Rating>* {movie.vote_average.toFixed(1)}</Rating>
+        <Rating>★ {movie.vote_average.toFixed(1)}</Rating>
         <Title>{movie.title}</Title>
         <ReleaseDate>개봉일: {movie.release_date}</ReleaseDate>
         <Overview>{movie.overview}</Overview>
