@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { getMovies } from './apis/movie';
 import type { RatingFilter } from './apis/movie';
 import type { Movie } from './types/movie';
-import styled from 'styled-components';
 import MovieCard from './components/MovieCard';
+import { Main, MovieGrid, FilterGroup, FilterButton } from './App.styles';
 
 const filters: { label: string; value: RatingFilter }[] = [
   { label: '전체', value: 'all' },
@@ -14,7 +14,7 @@ const filters: { label: string; value: RatingFilter }[] = [
   { label: '6점 미만', value: 'below6' },
 ];
 
-function App() {
+export default function App() {
   const [filter, setFilter] = useState<RatingFilter>('all');
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState('');
@@ -24,6 +24,7 @@ function App() {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    // 필터나 페이지가 바뀐 뒤 늦게 도착한 이전 응답은 화면에 반영하지 않음
     let active = true;
 
     const loadMovies = async () => {
@@ -34,6 +35,7 @@ function App() {
         const data = await getMovies(page, filter);
 
         if (active) {
+          // 첫 페이지는 교체하고 무한 스크롤로 받은 다음 페이지는 뒤에 붙이기
           setMovies((current) =>
             page === 1 ? data.results : [...current, ...data.results],
           );
@@ -66,6 +68,7 @@ function App() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          // 한 번 감지한 뒤 관찰을 멈춰 같은 페이지를 여러 번 요청하지 않음
           observer.disconnect();
           setPage((current) => current + 1);
         }
@@ -89,11 +92,16 @@ function App() {
             $selected={filter === value}
             aria-pressed={filter === value}
             onClick={() => {
+              // 선택된 필터를 다시 누르면 선택을 해제하고 전체 목록으로 돌아감
+              const nextFilter = value === filter ? 'all' : value;
+
+              if (nextFilter === filter) return;
+
               setMovies([]);
               setPage(1);
               setHasMore(true);
               setLoading(true);
-              setFilter(value);
+              setFilter(nextFilter);
             }}
           >
             {label}
@@ -111,35 +119,3 @@ function App() {
     </Main>
   );
 }
-
-const Main = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 24px;
-`;
-
-const MovieGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
-`;
-
-const FilterGroup = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
-`;
-
-const FilterButton = styled.button<{ $selected: boolean }>`
-  padding: 8px 14px;
-  border: 0;
-  border-radius: 20px;
-  background-color: ${({ theme, $selected }) =>
-    $selected ? theme.colors.primary : theme.colors.surface};
-  color: ${({ theme, $selected }) =>
-    $selected ? theme.colors.background : theme.colors.text};
-  cursor: pointer;
-`;
-
-export default App;

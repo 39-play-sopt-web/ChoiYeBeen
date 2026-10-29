@@ -1,12 +1,20 @@
-import styled from 'styled-components';
 import type { Movie } from '../types/movie';
-import { Link } from 'react-router';
+import {
+  Card,
+  Poster,
+  NoPoster,
+  Content,
+  Rating,
+  Title,
+  ReleaseDate,
+  Overview,
+} from './MovieCard.styles';
 
 interface MovieCardProps {
   movie: Movie;
 }
 
-function MovieCard({ movie }: MovieCardProps) {
+export default function MovieCard({ movie }: MovieCardProps) {
   return (
     <Card to={`/movie/${movie.id}`}>
       {movie.poster_path ? (
@@ -27,65 +35,3 @@ function MovieCard({ movie }: MovieCardProps) {
     </Card>
   );
 }
-
-const Card = styled(Link)`
-  color: inherit;
-  text-decoration: none;
-
-  overflow: hidden;
-  border-radius: 12px;
-  background-color: ${({ theme }) => theme.colors.surface};
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: translateY(-4px);
-  }
-`;
-
-const Poster = styled.img`
-  display: block;
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
-`;
-
-const NoPoster = styled.div`
-  display: grid;
-  place-items: center;
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  color: ${({ theme }) => theme.colors.textMuted};
-`;
-
-const Content = styled.div`
-  padding: 16px;
-`;
-
-const Rating = styled.p`
-  margin: 0 0 8px;
-  color: ${({ theme }) => theme.colors.primary};
-`;
-
-const Title = styled.h2`
-  margin: 0 0 8px;
-  font-size: 18px;
-`;
-
-const ReleaseDate = styled.p`
-  margin: 0 0 12px;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.textMuted};
-`;
-
-const Overview = styled.p`
-  display: -webkit-box;
-  overflow: hidden;
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: 14px;
-  line-height: 1.5;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-`;
-
-export default MovieCard;
