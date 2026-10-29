@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import type { Movie } from '../types/movie';
+import { Link } from 'react-router';
 
 interface MovieCardProps {
   movie: Movie;
@@ -7,7 +8,7 @@ interface MovieCardProps {
 
 function MovieCard({ movie }: MovieCardProps) {
   return (
-    <Card>
+    <Card to={`/movie/${movie.id}`}>
       {movie.poster_path ? (
         <Poster
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -27,7 +28,10 @@ function MovieCard({ movie }: MovieCardProps) {
   );
 }
 
-const Card = styled.article`
+const Card = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+
   overflow: hidden;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.surface};

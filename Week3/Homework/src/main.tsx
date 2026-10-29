@@ -4,12 +4,19 @@ import App from './App.tsx';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 import { GlobalStyle } from './styles/GlobalStyle.ts';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import MovieDetailPage from './pages/MovieDetailPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <App />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<App />} />
+          <Route path='/movie/:movieId' element={<MovieDetailPage />} />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   </StrictMode>,
 );

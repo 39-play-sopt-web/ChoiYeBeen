@@ -1,4 +1,4 @@
-import type { MovieListResponse } from '../types/movie';
+import type { MovieDetail, MovieListResponse } from '../types/movie';
 import { client } from './client';
 
 export type RatingFilter = 'all' | '9' | '8' | '7' | '6' | 'below6';
@@ -28,5 +28,10 @@ export const getMovies = async (
     },
   });
 
+  return response.data;
+};
+
+export const getMovieDetail = async (movieId: number) => {
+  const response = await client.get<MovieDetail>(`/movie/${movieId}`);
   return response.data;
 };
