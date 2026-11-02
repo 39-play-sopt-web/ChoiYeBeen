@@ -25,22 +25,12 @@ function useNumberGame() {
     shuffle(createNumbers(cellCount + 1, maxNumber - cellCount)),
   );
 
-  function resetGame() {
-    setNumbers(shuffle(createNumbers(1, cellCount)));
-    setRemainingNumbers(
-      shuffle(createNumbers(cellCount + 1, maxNumber - cellCount)),
-    );
-    setNextNumber(1);
-    resetTimer();
-    setResult(null);
-  }
-
-  function handleLevelChange(nextLevel) {
-    const { size, maxNumber } = LEVEL_CONFIG[nextLevel];
+  function initializeGame(targetLevel) {
+    const { size, maxNumber } = LEVEL_CONFIG[targetLevel];
     const cellCount = size * size;
 
     resetTimer();
-    setLevel(nextLevel);
+    setLevel(targetLevel);
     setNumbers(shuffle(createNumbers(1, cellCount)));
     setRemainingNumbers(
       shuffle(createNumbers(cellCount + 1, maxNumber - cellCount)),
@@ -106,9 +96,9 @@ function useNumberGame() {
     elapsedTime,
     handleNumberClick,
     level,
-    handleLevelChange,
+    handleLevelChange: (nextLevel) => initializeGame(nextLevel),
     result,
-    resetGame,
+    resetGame: () => initializeGame(level),
   };
 }
 
