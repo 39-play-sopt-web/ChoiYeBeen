@@ -30,6 +30,9 @@ function ResultModal({ result, onConfirm }) {
             if (event.key === "Tab") {
               event.preventDefault();
             }
+            if (event.key === "Escape") {
+              onConfirm();
+            }
           }}
         >
           확인
