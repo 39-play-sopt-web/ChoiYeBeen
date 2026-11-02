@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { LEVEL_CONFIG } from "../constants/game";
 
 function Header({ menu, onMenuChange, elapsedTime, level, onLevelChange }) {
   return (
@@ -29,9 +30,11 @@ function Header({ menu, onMenuChange, elapsedTime, level, onLevelChange }) {
             value={level}
             onChange={(event) => onLevelChange(Number(event.target.value))}
           >
-            <option value="1">Level 1 (3x3)</option>
-            <option value="2">Level 2 (4x4)</option>
-            <option value="3">Level 3 (5x5)</option>
+            {Object.entries(LEVEL_CONFIG).map(([value, { size }]) => (
+              <option key={value} value={value}>
+                Level {value} ({size}x{size})
+              </option>
+            ))}
           </LevelSelect>
 
           <Timer>{(elapsedTime / 1000).toFixed(2)}초</Timer>
