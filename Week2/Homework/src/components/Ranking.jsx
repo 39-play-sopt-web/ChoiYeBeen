@@ -44,7 +44,7 @@ function Ranking() {
 
             <tbody>
               {sortedRecords.map((record, index) => (
-                <tr key={index}>
+                <tr key={record.recordedAt}>
                   <td>{index + 1}</td>
                   <td>Level {record.level}</td>
                   <td>{(record.playTime / 1000).toFixed(2)}초</td>
