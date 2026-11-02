@@ -12,7 +12,7 @@ const theme = {
     backgroundStart: "#a5f3fc",
     backgroundEnd: "#6ee7b7",
     danger: "#ef4444",
-    dangerhover: "#fef2f2",
+    dangerHover: "#fef2f2",
     overlay: "rgba(0, 0, 0, 0.4)",
   },
   shadow: {
