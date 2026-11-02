@@ -44,13 +44,13 @@ function useNumberGame() {
       return;
     }
 
-    if (number === 1) {
-      startTimer();
-    }
-
     // 순서에 맞지 않는 숫자는 처리 X
     if (number !== nextNumber) {
       return;
+    }
+
+    if (nextNumber === 1) {
+      startTimer();
     }
 
     if (number === maxNumber) {
