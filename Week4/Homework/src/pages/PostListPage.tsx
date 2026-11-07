@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { SubmitEvent } from 'react';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 
 import { usePosts } from '../hooks/usePosts';
@@ -95,7 +96,7 @@ function PostListPage() {
           ) : (
             <PostList>
               {data.posts.map((post) => (
-                <PostCard key={post.id}>
+                <PostCard key={post.id} to={`/posts/${post.id}`}>
                   <PostTitle>{post.title}</PostTitle>
                   <PostContent>{post.content}</PostContent>
 
@@ -212,7 +213,7 @@ const PostList = styled.div`
   margin-top: 24px;
 `;
 
-const PostCard = styled.article`
+const PostCard = styled(Link)`
   padding: 24px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;

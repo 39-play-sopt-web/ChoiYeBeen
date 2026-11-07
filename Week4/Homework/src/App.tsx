@@ -4,6 +4,7 @@ import BoardLayout from './components/BoardLayout';
 import AuthorizationPage from './pages/AuthorizationPage';
 import PostListPage from './pages/PostListPage';
 import PostCreatePage from './pages/PostCreatePage';
+import PostDetailPage from './pages/PostDetailPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route element={<BoardLayout />}>
         <Route path='/posts' element={<PostListPage />} />
         <Route path='/posts/new' element={<PostCreatePage />} />
+        <Route path='/posts/:postId' element={<PostDetailPage />} />
       </Route>
 
       <Route path='*' element={<Navigate to='/' replace />} />

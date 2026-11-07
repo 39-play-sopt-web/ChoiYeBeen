@@ -30,3 +30,13 @@ export const createPost = async (request: CreatePostRequest): Promise<Post> => {
 
   return response.data.data;
 };
+
+export const getPost = async (postId: number): Promise<Post> => {
+  const response = await api.get<ApiResponse<Post>>(`/api/v1/posts/${postId}`);
+
+  if (!response.data.isSuccess) {
+    throw new Error(response.data.message);
+  }
+
+  return response.data.data;
+};
