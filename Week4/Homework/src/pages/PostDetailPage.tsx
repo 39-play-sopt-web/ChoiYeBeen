@@ -1,7 +1,8 @@
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { useState } from 'react';
 import { usePost } from '../hooks/usePost';
+import PostEditForm from '../components/PostEditForm';
 
 function PostDetailPage() {
   const { postId } = useParams();
@@ -10,6 +11,17 @@ function PostDetailPage() {
   const isValidId = Number.isSafeInteger(id) && id > 0;
 
   const { data: post, isPending, isError, refetch } = usePost(id);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEdit = () => {
+    if (!localStorage.getItem('authorizationCode')) {
+      alert('먼저 회원 코드를 발급받아 주세요.');
+      return;
+    }
+
+    setIsEditing(true);
+  };
 
   if (!isValidId) {
     return (
@@ -51,16 +63,32 @@ function PostDetailPage() {
       <ListLink to='/posts'>← 목록으로</ListLink>
 
       <Article>
-        <Title>{post.title}</Title>
+        {isEditing ? (
+          <PostEditForm
+            key={post.id}
+            post={post}
+            onClose={() => setIsEditing(false)}
+          />
+        ) : (
+          <>
+            <Title>{post.title}</Title>
 
-        <Meta>
-          <Author>{post.author}</Author>
-          <time dateTime={post.createdAt}>
-            {new Date(post.createdAt).toLocaleString('ko-KR')}
-          </time>
-        </Meta>
+            <Meta>
+              <Author>{post.author}</Author>
+              <time dateTime={post.createdAt}>
+                {new Date(post.createdAt).toLocaleString('ko-KR')}
+              </time>
+            </Meta>
 
-        <Content>{post.content}</Content>
+            <Content>{post.content}</Content>
+
+            <Actions>
+              <EditButton type='button' onClick={handleEdit}>
+                수정
+              </EditButton>
+            </Actions>
+          </>
+        )}
       </Article>
     </Container>
   );
@@ -130,6 +158,27 @@ const ErrorBox = styled.div`
 
 const RetryButton = styled.button`
   padding: 10px 16px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 8px;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const Actions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+const EditButton = styled.button`
+  padding: 10px 18px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
   background: transparent;

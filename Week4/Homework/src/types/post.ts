@@ -24,3 +24,8 @@ export interface CreatePostRequest {
   content: string;
   author: string;
 }
+
+export interface UpdatePostRequest {
+  title: string;
+  content: string;
+}

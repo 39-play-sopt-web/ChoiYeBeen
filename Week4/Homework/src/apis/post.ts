@@ -5,6 +5,7 @@ import type {
   GetPostsParams,
   Post,
   PostListData,
+  UpdatePostRequest,
 } from '../types/post';
 
 export const getPosts = async (
@@ -33,6 +34,22 @@ export const createPost = async (request: CreatePostRequest): Promise<Post> => {
 
 export const getPost = async (postId: number): Promise<Post> => {
   const response = await api.get<ApiResponse<Post>>(`/api/v1/posts/${postId}`);
+
+  if (!response.data.isSuccess) {
+    throw new Error(response.data.message);
+  }
+
+  return response.data.data;
+};
+
+export const updatePost = async (
+  postId: number,
+  request: UpdatePostRequest,
+): Promise<Post> => {
+  const response = await api.put<ApiResponse<Post>>(
+    `/api/v1/posts/${postId}`,
+    request,
+  );
 
   if (!response.data.isSuccess) {
     throw new Error(response.data.message);
