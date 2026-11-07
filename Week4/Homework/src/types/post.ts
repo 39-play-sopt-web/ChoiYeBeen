@@ -18,3 +18,9 @@ export interface GetPostsParams {
   cursor?: number;
   size?: number;
 }
+
+export interface CreatePostRequest {
+  title: string;
+  content: string;
+  author: string;
+}
