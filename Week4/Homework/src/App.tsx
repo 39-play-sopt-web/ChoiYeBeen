@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import BoardLayout from './components/BoardLayout';
-import AuthorizationPage from './pages/AuthorizationPage';
-import PostListPage from './pages/PostListPage';
-import PostCreatePage from './pages/PostCreatePage';
-import PostDetailPage from './pages/PostDetailPage';
+import AuthorizationPage from './pages/AuthorizationPage/AuthorizationPage';
+import PostListPage from './pages/PostListPage/PostListPage';
+import PostCreatePage from './pages/PostCreatePage/PostCreatePage';
+import PostDetailPage from './pages/PostDetailPage/PostDetailPage';
 import RequireAuth from './components/RequireAuth';
 
 function App() {
