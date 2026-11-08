@@ -5,6 +5,7 @@ import AuthorizationPage from './pages/AuthorizationPage';
 import PostListPage from './pages/PostListPage';
 import PostCreatePage from './pages/PostCreatePage';
 import PostDetailPage from './pages/PostDetailPage';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
   return (
@@ -13,8 +14,11 @@ function App() {
 
       <Route element={<BoardLayout />}>
         <Route path='/posts' element={<PostListPage />} />
-        <Route path='/posts/new' element={<PostCreatePage />} />
         <Route path='/posts/:postId' element={<PostDetailPage />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path='/posts/new' element={<PostCreatePage />} />
+        </Route>
       </Route>
 
       <Route path='*' element={<Navigate to='/' replace />} />

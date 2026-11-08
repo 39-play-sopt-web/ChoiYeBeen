@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { SubmitEvent } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useCreatePost } from '../hooks/useCreatePost';
@@ -49,10 +49,6 @@ function PostCreatePage() {
       author: author.trim(),
     });
   };
-
-  if (!authorizationCode) {
-    return <Navigate to='/' replace />;
-  }
 
   return (
     <Container>
