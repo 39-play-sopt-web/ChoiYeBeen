@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { SubmitEvent } from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
@@ -9,13 +9,54 @@ function PostListPage() {
   const [input, setInput] = useState('');
   const [keyword, setKeyword] = useState('');
 
-  const { data, isPending, isError, isFetching, refetch } = usePosts(keyword);
+  const {
+    data,
+    isPending,
+    isError,
+    isFetching,
+    isFetchingNextPage,
+    isFetchNextPageError,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = usePosts(keyword);
+
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   const trimmedInput = input.trim();
 
   const isValidKeyword = trimmedInput.length >= 2 && trimmedInput.length <= 50;
 
   const showKeywordError = trimmedInput.length > 0 && !isValidKeyword;
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+
+    if (!target || !hasNextPage || isFetching || isFetchNextPageError) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry?.isIntersecting) {
+          void fetchNextPage();
+        }
+      },
+      {
+        rootMargin: '200px',
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasNextPage, isFetching, isFetchNextPageError, fetchNextPage]);
 
   const handleSearch = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -76,7 +117,7 @@ function PostListPage() {
 
       {isPending ? (
         <StatusMessage role='status'>게시글을 불러오는 중이에요.</StatusMessage>
-      ) : isError ? (
+      ) : isError && !data ? (
         <ErrorBox role='alert'>
           <p>게시글을 불러오지 못했어요.</p>
           <ResetButton type='button' onClick={() => void refetch()}>
@@ -85,30 +126,58 @@ function PostListPage() {
         </ErrorBox>
       ) : (
         <>
-          {isFetching && (
+          {isFetching && !isFetchingNextPage && (
             <StatusMessage role='status'>목록을 갱신하고 있어요.</StatusMessage>
           )}
 
-          {data.posts.length === 0 ? (
+          {posts.length === 0 ? (
             <StatusMessage>
               {keyword ? '검색 결과가 없어요.' : '등록된 게시글이 없어요.'}
             </StatusMessage>
           ) : (
-            <PostList>
-              {data.posts.map((post) => (
-                <PostCard key={post.id} to={`/posts/${post.id}`}>
-                  <PostTitle>{post.title}</PostTitle>
-                  <PostContent>{post.content}</PostContent>
+            <>
+              <PostList>
+                {posts.map((post) => (
+                  <PostCard key={post.id} to={`/posts/${post.id}`}>
+                    <PostTitle>{post.title}</PostTitle>
+                    <PostContent>{post.content}</PostContent>
 
-                  <PostMeta>
-                    <Author>{post.author}</Author>
-                    <time dateTime={post.createdAt}>
-                      {new Date(post.createdAt).toLocaleString('ko-KR')}
-                    </time>
-                  </PostMeta>
-                </PostCard>
-              ))}
-            </PostList>
+                    <PostMeta>
+                      <Author>{post.author}</Author>
+                      <time dateTime={post.createdAt}>
+                        {new Date(post.createdAt).toLocaleString('ko-KR')}
+                      </time>
+                    </PostMeta>
+                  </PostCard>
+                ))}
+              </PostList>
+
+              <LoadMoreTarget ref={loadMoreRef} aria-hidden='true' />
+
+              {isFetchingNextPage && (
+                <StatusMessage role='status'>
+                  게시글을 더 불러오는 중이에요.
+                </StatusMessage>
+              )}
+
+              {isFetchNextPageError && (
+                <ErrorBox role='alert'>
+                  <p>다음 게시글을 불러오지 못했어요.</p>
+
+                  <ResetButton
+                    type='button'
+                    disabled={isFetching}
+                    onClick={() => void fetchNextPage()}
+                  >
+                    다시 시도
+                  </ResetButton>
+                </ErrorBox>
+              )}
+
+              {!hasNextPage && (
+                <StatusMessage>모든 게시글을 확인했어요.</StatusMessage>
+              )}
+            </>
           )}
         </>
       )}
@@ -246,4 +315,8 @@ const PostMeta = styled.div`
 
 const Author = styled.span`
   color: ${({ theme }) => theme.colors.primary};
+`;
+
+const LoadMoreTarget = styled.div`
+  height: 1px;
 `;
