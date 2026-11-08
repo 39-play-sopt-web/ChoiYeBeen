@@ -57,3 +57,13 @@ export const updatePost = async (
 
   return response.data.data;
 };
+
+export const deletePost = async (postId: number): Promise<void> => {
+  const response = await api.delete<ApiResponse<null>>(
+    `/api/v1/posts/${postId}`,
+  );
+
+  if (!response.data.isSuccess) {
+    throw new Error(response.data.message);
+  }
+};

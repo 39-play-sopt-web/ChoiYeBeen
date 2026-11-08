@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { usePost } from '../hooks/usePost';
 import PostEditForm from '../components/PostEditForm';
+import { useDeletePost } from '../hooks/useDeletePost';
 
 function PostDetailPage() {
   const { postId } = useParams();
@@ -11,6 +12,8 @@ function PostDetailPage() {
   const isValidId = Number.isSafeInteger(id) && id > 0;
 
   const { data: post, isPending, isError, refetch } = usePost(id);
+
+  const { mutate: removePost, isPending: isDeleting } = useDeletePost(id);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -21,6 +24,25 @@ function PostDetailPage() {
     }
 
     setIsEditing(true);
+  };
+
+  const handleDelete = () => {
+    if (isDeleting) {
+      return;
+    }
+
+    if (!localStorage.getItem('authorizationCode')) {
+      alert('먼저 회원 코드를 발급받아 주세요.');
+      return;
+    }
+
+    const confirmed = window.confirm('이 게시글을 삭제할까요?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    removePost();
   };
 
   if (!isValidId) {
@@ -83,9 +105,21 @@ function PostDetailPage() {
             <Content>{post.content}</Content>
 
             <Actions>
-              <EditButton type='button' onClick={handleEdit}>
+              <EditButton
+                type='button'
+                disabled={isDeleting}
+                onClick={handleEdit}
+              >
                 수정
               </EditButton>
+
+              <DeleteButton
+                type='button'
+                disabled={isDeleting}
+                onClick={handleDelete}
+              >
+                {isDeleting ? '삭제 중...' : '삭제'}
+              </DeleteButton>
             </Actions>
           </>
         )}
@@ -186,5 +220,23 @@ const EditButton = styled.button`
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const DeleteButton = styled.button`
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.background};
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: ${({ theme }) => theme.colors.primaryHover};
+  }
+
+  &:disabled {
+    opacity: 0.5;
   }
 `;
